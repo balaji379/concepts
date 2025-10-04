@@ -1,0 +1,28 @@
+syntax = "proto3";
+package com.example.protobuffer;
+option java_outer_classname = "EmployeeProto";
+option java_multiple_files = true;
+message Address{
+  string street = 1;
+  string city = 2;
+  string state = 3;
+}
+message Employee{
+  int32 userId = 1;
+  string name = 2;
+  bool active = 3;
+  Address address = 4;
+  repeated string hobbies = 5;
+}
+message EmployeeList{
+  repeated Employee employee = 1;
+}
+message ResponseStatus{
+  string status = 1;
+}
+message Empty{};
+service EmployeeService{
+  rpc getEmployeeById(Employee) returns (Employee);
+  rpc getAllEmployee(Empty) returns (EmployeeList);
+  rpc saveEmployee(Employee) returns (ResponseStatus);
+}

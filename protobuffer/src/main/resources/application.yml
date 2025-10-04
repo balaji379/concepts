@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: proto-buffer
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/dummy
+    username: root
+    password: 2799
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+
+
+  grpc:
+    server:
+      port: 9090
+      reflection:
+        enabled: true
+
+logging:
+  level:
+    org.springframework.grpc: INFO
+    io.grpc: INFO
