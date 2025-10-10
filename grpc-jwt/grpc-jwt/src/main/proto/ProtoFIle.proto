@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_outer_classname = "ProtoMessage";
+option java_package = "com.vb.grpc_jwt";
+import "google/protobuf/empty.proto";
+
+message JwtRequest {
+  string userName = 1;
+  string password = 2;
+}
+
+message JWTToken {
+  string jwtToken = 1;
+}
+
+message Employee {
+  string name = 1;
+  int32 salary = 2;
+}
+
+service EmployeeService {
+  rpc getEmployeeInfo(google.protobuf.Empty) returns (Employee) {}
+}
+
+service AuthService {
+  rpc authenticate(JwtRequest) returns (JWTToken) {}
+}
