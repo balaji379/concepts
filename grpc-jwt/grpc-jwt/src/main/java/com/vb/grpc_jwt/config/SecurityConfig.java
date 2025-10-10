@@ -29,4 +29,5 @@ public class SecurityConfig {
     public AuthenticationManager buildauthprovider() {
         return new ProviderManager(jwtProvider);
     }
+
 }

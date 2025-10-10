@@ -1,19 +1,41 @@
 package com.vb.grpc_jwt.Jwt;
 
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
 
 @Component
 public class JwtProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        return null;
+        if (!authentication.isAuthenticated()) {
+            UserDetails userDetails = new CustomUserdetailSetvice().loadUserByUsername(authentication.getName());
+            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        }
+        return authentication;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return false;
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
+
+    static class CustomUserdetailSetvice implements UserDetailsService {
+
+        @Override
+        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+            String role = username == "vb" ? "ROLE_ADMIN" : "ROLE_USER";
+            var authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
+            return new User(username, "", authorities);
+        }
     }
 }

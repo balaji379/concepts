@@ -67,11 +67,12 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.lognet</groupId>
+            <groupId>net.devh</groupId>
             <artifactId>grpc-spring-boot-starter</artifactId>
-            <version>5.1.5</version>
+            <version>3.1.0.RELEASE</version>
         </dependency>
-		<dependency>
+
+        <dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>

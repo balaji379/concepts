@@ -31,15 +31,17 @@ public class GrpcAuthService extends AuthServiceGrpc.AuthServiceImplBase {
 
     @Override
     public void authenticate(JwtRequest request, StreamObserver<JWTToken> responseObserver) {
-        Authentication authentication = jwtProvider.authenticate(new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword()));
+        Authentication authentication = jwtProvider.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword()));
         String authority = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
         String username = request.getUserName();
-        Jwts.builder()
+        responseObserver.onNext(JWTToken.newBuilder().setJwtToken(Jwts.builder()
                 .claim("auth", authentication)
                 .subject(username)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(expiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+                .compact()).build());
+        responseObserver.onCompleted();
     }
 }
