@@ -30,4 +30,6 @@ public class SecurityConfig {
         return new ProviderManager(jwtProvider);
     }
 
+    
+
 }

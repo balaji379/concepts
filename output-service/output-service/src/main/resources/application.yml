@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: output-service
+grpc:
+  client:
+    movie-service:
+      address: 'static://localhost:9001'
+      negotiation-type: PLAINTEXT

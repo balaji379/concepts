@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: movie-service
+  grpc:
+    server:
+      port: 9001
+      reflection:
+        enabled: true
