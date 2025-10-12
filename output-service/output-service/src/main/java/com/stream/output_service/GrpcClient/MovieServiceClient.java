@@ -30,6 +30,7 @@ public class MovieServiceClient {
                 }
                 try {
                     out.write(movieresponse.getChunk().toByteArray());
+                    System.out.println(Arrays.toString(movieresponse.getChunk().toByteArray()));
                     out.flush();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -39,12 +40,18 @@ public class MovieServiceClient {
 
             @Override
             public void onError(Throwable throwable) {
-                System.out.println("error message "+throwable.getCause());
+                System.out.println("error message " + throwable.getCause());
             }
 
             @Override
             public void onCompleted() {
                 System.out.println("response is completed ");
+                try {
+                    asyncContext.getResponse().getOutputStream().flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                asyncContext.complete();
             }
         });
     }
