@@ -1,6 +1,9 @@
 package com.stream.output_service.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stream.output_service.GrpcClient.MovieServiceClient;
+import com.stream.output_service.model.Thumbnails;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,9 +13,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/movie")
@@ -20,6 +28,43 @@ public class MovieController {
 
     @Autowired
     MovieServiceClient movieServiceClient;
+
+    List<Thumbnails> thumbnails = new ArrayList<>();
+
+    @PostConstruct
+    public void generateThumbnails() throws IOException {
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_4K HDR IMAX  Wanda in Mirror Dimension - Doctor Strange in the Multiverse of Madness  Dolby 5.1_1080p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_4K HDR IMAX  Wanda in Mirror Dimension - Doctor Strange in the Multiverse of Madness  Dolby 5.1_1080p.mp4")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_8K HDR  The Mirror Dimension (Spider-Man No Way Home)  Dolby 5.1_1080p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_8K HDR  The Mirror Dimension (Spider-Man No Way Home)  Dolby 5.1_1080p.mp4")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC Client Streaming Explained \uD83D\uDE80  Real-Time Bulk Stock Updates Demo  @Javatechie_1080p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_Spring Boot + gRPC Client Streaming Explained \uD83D\uDE80  Real-Time Bulk Stock Updates Demo  @Javatechie_1080p.mp4")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC  Server Streaming Explained  Real-Time Stock Update Example @Javatechie_1080p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_Spring Boot + gRPC  Server Streaming Explained  Real-Time Stock Update Example @Javatechie_1080p.mp4")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4")).readAllBytes())).build());
+    }
+
+    @GetMapping("/start-thumbnail-stream")
+    public StreamingResponseBody startThumbnailsStream(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        System.out.println("i have caught you request");
+        return outputStream -> {
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+            try {
+                for (Thumbnails thumbnail : thumbnails) {
+                    String json = new ObjectMapper().writeValueAsString(thumbnail);
+                    System.out.println("response : " + json);
+                    writer.write(json);
+                    writer.write("\n");
+                    writer.flush();
+                    Thread.sleep(2000);
+                }
+
+            } catch (Exception e) {
+            }
+        };
+    }
+
+
 
     @GetMapping("/start-stream")
     public void startstream(HttpServletRequest request, HttpServletResponse response) {
@@ -37,7 +82,7 @@ public class MovieController {
             @RequestHeader(value = "Range", required = false) String rangeHeader
     ) throws IOException {
 
-        File videoFile = new File("D:\\movies\\Intense_Study_40Hz_Gamma_Binaural_Beats_to_Increase_Productivi.mp4");
+        File videoFile = new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\" + fileName);
         if (!videoFile.exists()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -80,3 +125,4 @@ public class MovieController {
                 .body(new ByteArrayResource(data));
     }
 }
+
