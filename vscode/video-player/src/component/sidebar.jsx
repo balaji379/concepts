@@ -38,9 +38,9 @@ function Sidebar() {
     readStream();
   }, []);
   return (
-    <div className="w-[25%] bg-black h-dvh overflow-auto scrollbar-none">
-      <div className="title w-full h-[5%] text-[20px] rounded-[10px] mt-4 bg-sky-600 text-center mb-4 text-white italic font-bold ">
-        <i class="fa-solid fa-film fa-beat-fade"></i>
+    <div className="w-[20%] bg-black h-dvh overflow-auto scrollbar-none">
+      <div className="title w-full h-[5%] text-[20px] rounded-[10px] mt-4 bg-violet-800 text-center mb-4 text-white italic font-bold ">
+        <i className="fa-solid fa-film fa-beat-fade text-white pe-3"></i>
         video-playlist
       </div>
       {thumbnails?.map((thumbnail, key) => (

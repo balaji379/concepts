@@ -4,9 +4,9 @@ import UseStore from "../store/UseStore";
 function VideoPlayer() {
   const { moviename } = UseStore();
   return (
-    <div className="w-[75%] h-screen bg-black">
+    <div className="w-[80%] h-screen bg-black">
       <video
-        className="w-full h-full"
+        className="w-full h-screen"
         src={`http://localhost:8080/api/movie/${moviename}`}
         controls
         autoPlay

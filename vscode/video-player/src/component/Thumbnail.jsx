@@ -13,17 +13,17 @@ function Thumbnail({ obj }) {
   return (
     <div
       id="playlist"
-      className="w-full flex h-[25%] flex-col gap-1 rounded-2xl mt-2"
+      className="w-full cursor-pointer flex h-[25%] flex-col  rounded-2xl mt-2 transform transition-transform duration-500 ease-in-out hover:scale-120"
       onClick={() => setNewMoviename(obj.name)}
     >
       <div className="w-full h-[75%]">
         <img
-          className="h-full w-full"
+          className="h-full w-full p-2.5 rounded-2xl"
           src={`data:image/jpeg;base64,${obj.img}`}
           alt=""
         />
       </div>
-      <p className="text-center h-[15%] rounded-[10px] text-[12px] break-words text-white">
+      <p className="text-center underline h-fit rounded-[10px] text-[12px] break-words text-violet-800">
         {obj.name}
       </p>
     </div>

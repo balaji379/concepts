@@ -33,13 +33,14 @@ public class MovieController {
 
     @PostConstruct
     public void generateThumbnails() throws IOException {
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_4K HDR IMAX  Wanda in Mirror Dimension - Doctor Strange in the Multiverse of Madness  Dolby 5.1_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\beach.jpg")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_8K HDR  The Mirror Dimension (Spider-Man No Way Home)  Dolby 5.1_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\images (1).jpg")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\images.jpg")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\download (2).jpg")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC Client Streaming Explained \uD83D\uDE80  Real-Time Bulk Stock Updates Demo  @Javatechie_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\download.png")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC  Server Streaming Explained  Real-Time Stock Update Example @Javatechie_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\download (1).jpg")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\download.jpg")).readAllBytes())).build());
+        String prefixPath = "D:\\GitHub\\concepts\\output-service\\output-service\\src\\main\\java\\images\\";
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_4K HDR IMAX  Wanda in Mirror Dimension - Doctor Strange in the Multiverse of Madness  Dolby 5.1_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "avengers.jpeg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_8K HDR  The Mirror Dimension (Spider-Man No Way Home)  Dolby 5.1_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "endgamepick.jpeg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "endgameprime.jpg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "spiderman.jpeg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC Client Streaming Explained \uD83D\uDE80  Real-Time Bulk Stock Updates Demo  @Javatechie_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "thor.jpg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC  Server Streaming Explained  Real-Time Stock Update Example @Javatechie_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "avengers.jpeg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "endgamepick.jpeg")).readAllBytes())).build());
     }
 
     @GetMapping("/start-thumbnail-stream")
@@ -56,6 +57,7 @@ public class MovieController {
                     writer.write(json);
                     writer.write("\n");
                     writer.flush();
+                    Thread.sleep(1000);
                 }
 
             } catch (Exception e) {
@@ -79,8 +81,8 @@ public class MovieController {
             @PathVariable String fileName,
             @RequestHeader(value = "Range", required = false) String rangeHeader
     ) throws IOException {
-
-        File videoFile = new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\" + fileName);
+        String prefixpath = "D:\\GitHub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\";
+        File videoFile = new File(prefixpath + fileName);
         if (!videoFile.exists()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
