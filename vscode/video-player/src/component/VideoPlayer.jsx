@@ -1,10 +1,10 @@
 //import axios from "axios";
-import { useStore } from "zustand";
+import UseStore from "../store/UseStore";
 
 function VideoPlayer() {
-  const{moviename} = useStore();
+  const { moviename } = UseStore();
   return (
-    <div className="w-[75%] h-screen bg-amber-500">
+    <div className="w-[75%] h-screen bg-black">
       <video
         className="w-full h-full"
         src={`http://localhost:8080/api/movie/${moviename}`}

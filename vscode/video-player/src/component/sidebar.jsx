@@ -29,9 +29,6 @@ function Sidebar() {
         for (const chunk of parts) {
           if (chunk.trim()) {
             const obj = JSON.parse(chunk);
-            console.log(`name is ${obj.name}`);
-            console.log(`id is ${obj.id}`);
-            console.log(`img is ${obj.img}`);
             addthumbnail(obj);
             console.log(obj);
           }
@@ -42,7 +39,8 @@ function Sidebar() {
   }, []);
   return (
     <div className="w-[25%] bg-black h-dvh overflow-auto scrollbar-none">
-      <div className="title w-full h-[4%] border-3 text-[17px] rounded-[10px] bg-white text-center italic font-extralight ">
+      <div className="title w-full h-[5%] text-[20px] rounded-[10px] mt-4 bg-sky-600 text-center mb-4 text-white italic font-bold ">
+        <i class="fa-solid fa-film fa-beat-fade"></i>
         video-playlist
       </div>
       {thumbnails?.map((thumbnail, key) => (

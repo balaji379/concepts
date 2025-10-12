@@ -6,10 +6,10 @@ const UseStore = create((set) => ({
     set((state) => ({
       thumbnails: [...state.thumbnails, newthumbnails],
     })),
-    moviename : "",
-    setMovieName : (newname) => 
-        set((state)=>({
-            moviename: newname
-        }))
+  moviename: "",
+  setMovieName: (newname) =>
+    set((state) => ({
+      moviename: newname,
+    })),
 }));
 export default UseStore;

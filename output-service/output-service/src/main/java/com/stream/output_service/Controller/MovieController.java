@@ -33,13 +33,13 @@ public class MovieController {
 
     @PostConstruct
     public void generateThumbnails() throws IOException {
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_4K HDR IMAX  Wanda in Mirror Dimension - Doctor Strange in the Multiverse of Madness  Dolby 5.1_1080p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_4K HDR IMAX  Wanda in Mirror Dimension - Doctor Strange in the Multiverse of Madness  Dolby 5.1_1080p.mp4")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_8K HDR  The Mirror Dimension (Spider-Man No Way Home)  Dolby 5.1_1080p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_8K HDR  The Mirror Dimension (Spider-Man No Way Home)  Dolby 5.1_1080p.mp4")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC Client Streaming Explained \uD83D\uDE80  Real-Time Bulk Stock Updates Demo  @Javatechie_1080p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_Spring Boot + gRPC Client Streaming Explained \uD83D\uDE80  Real-Time Bulk Stock Updates Demo  @Javatechie_1080p.mp4")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC  Server Streaming Explained  Real-Time Stock Update Example @Javatechie_1080p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_Spring Boot + gRPC  Server Streaming Explained  Real-Time Stock Update Example @Javatechie_1080p.mp4")).readAllBytes())).build());
-        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_4K HDR IMAX  Wanda in Mirror Dimension - Doctor Strange in the Multiverse of Madness  Dolby 5.1_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\beach.jpg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_8K HDR  The Mirror Dimension (Spider-Man No Way Home)  Dolby 5.1_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\images (1).jpg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\images.jpg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\download (2).jpg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC Client Streaming Explained \uD83D\uDE80  Real-Time Bulk Stock Updates Demo  @Javatechie_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\download.png")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC  Server Streaming Explained  Real-Time Stock Update Example @Javatechie_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\download (1).jpg")).readAllBytes())).build());
+        thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File("C:\\Users\\DELL\\Downloads\\images\\download.jpg")).readAllBytes())).build());
     }
 
     @GetMapping("/start-thumbnail-stream")
@@ -52,18 +52,16 @@ public class MovieController {
             try {
                 for (Thumbnails thumbnail : thumbnails) {
                     String json = new ObjectMapper().writeValueAsString(thumbnail);
-                    System.out.println("response : " + json);
+                    //System.out.println("response : " + json);
                     writer.write(json);
                     writer.write("\n");
                     writer.flush();
-                    Thread.sleep(2000);
                 }
 
             } catch (Exception e) {
             }
         };
     }
-
 
 
     @GetMapping("/start-stream")

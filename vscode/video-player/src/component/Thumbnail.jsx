@@ -1,15 +1,20 @@
 // import axios from "axios";
 // import React, { useEffect } from "react";
+import UseStore from "../store/UseStore";
 
-import axios from "axios";
+function Thumbnail({ obj }) {
+  const { setMovieName } = UseStore();
+  console.log("value print from thumbnail component : " + obj.img);
 
-function Thumbnail({ key, obj }) {
-
+  function setNewMoviename(newmovieName) {
+    console.log("selected movie name is " + newmovieName);
+    setMovieName(newmovieName);
+  }
   return (
     <div
       id="playlist"
       className="w-full flex h-[25%] flex-col gap-1 rounded-2xl mt-2"
-      
+      onClick={() => setNewMoviename(obj.name)}
     >
       <div className="w-full h-[75%]">
         <img
