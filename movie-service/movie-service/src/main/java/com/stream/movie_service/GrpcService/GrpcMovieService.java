@@ -47,7 +47,7 @@ public class GrpcMovieService extends GrpcMovieServieGrpc.GrpcMovieServieImplBas
         try {
             FileInputStream inputStream = new FileInputStream(videoFile);
             int byteread = 0;
-            byte[] buffer = new byte[262144];
+            byte[] buffer = new byte[64*1024];
             while ((byteread = inputStream.read(buffer)) != -1) {
                 DummyResponse movieresponse = DummyResponse.newBuilder().setData(buffer.toString()).build();
                 System.out.println(movieresponse.getData());
