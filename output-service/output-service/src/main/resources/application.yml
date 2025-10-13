@@ -6,3 +6,8 @@ grpc:
     movie-service:
       address: 'static://localhost:9001'
       negotiation-type: PLAINTEXT
+springdoc:
+  swagger-ui:
+    path: videobuf-doc
+  api-docs:
+    path: videobuf-json/doc

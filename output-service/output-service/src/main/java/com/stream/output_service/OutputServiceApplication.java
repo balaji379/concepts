@@ -9,4 +9,4 @@ public class OutputServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OutputServiceApplication.class, args);
 	}
-}
+    }
