@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 public class OrderService {
@@ -48,7 +49,11 @@ public class OrderService {
     * Propagation.NESTED -> it similar to required_new but if outer transaction push it to roll back when that failed.
     *  */
     /*
-    * Isolation -> it define how be visibility of changes between the transaction 
+    * Isolation -> it define how be visibility of changes between the transaction
+    * Isolation.DEFAULT -> it select the isolation based on data base what default isolation of database
+    * Isolation.READ_UNCOMMIT -> it allow a thread to read data even that data using by other so it lead to make dirty data
+    * Isolation.READ_COMMIT -> it not allow a thread to read uncommited data it only give last commited data
+    * Isolation.Serialization -> it make a con-currency execution to synchronous execution like one after other
     * */
     @Transactional(readOnly = false,propagation = Propagation.REQUIRED)
     public void placeOrder(Order order) {
