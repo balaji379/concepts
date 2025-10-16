@@ -14,6 +14,5 @@ public class OrderProcessInventory {
     OrderProcessInventory(ProductRepo productRepo, OrderRepo orderRepo) {
         this.productRepo = productRepo;
         this.orderRepo = orderRepo;
-
     }
 }
