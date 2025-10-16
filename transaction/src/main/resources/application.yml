@@ -2,9 +2,10 @@ spring:
   application:
     name: transaction-tutorial
   datasource:
-    username: root
+    url: jdbc:mysql://localhost:3306/testing
+    username: vb
     password: 12345678
-    url: jdbc:mysql://localhost:3306/vb
+
   jpa:
     show-sql: true
     properties:

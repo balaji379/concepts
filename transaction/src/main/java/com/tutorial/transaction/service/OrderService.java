@@ -9,6 +9,8 @@ import com.tutorial.transaction.repo.ProductRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderService {
@@ -34,5 +36,32 @@ public class OrderService {
                 .stockQuantity(product.getStockQuantity())
                 .id(product.getId())
                 .build();
+    }
+
+    /*
+    * propagation ->
+    * Propagation.REQUIRED -> A single main transaction handles the all inner transaction if any of one is failed ,then it rollback the ever inner transaction
+    * Propagation.REQUIRED_NEW -> it create a  new transaction even it has main transaction and it will execute even any inner transaction is failed
+    * Propagation.MANDATORY -> it check if any transaction has present ,then it use that else throw exception and if any error occur while the execution it not harm the main transaction
+    * Propagation.NEVER -> it execute without any transaction, throw exception if any transaction is found
+    * Propagation.NOT_SUPPORTED -> execute the block of without any transaction , suspend the transaction if any transaction exist
+    * Propagation.NESTED -> it similar to required_new but if outer transaction push it to roll back when that failed.
+    *  */
+    /*
+    * Isolation -> it define how be visibility of changes between the transaction 
+    * */
+    @Transactional(readOnly = false,propagation = Propagation.REQUIRED)
+    public void placeOrder(Order order) {
+        int orderId = order.getProductId();
+        if (productRepo.existsById(orderId)) {
+            Product product = productRepo.getReferenceById(orderId);
+            if (product.getStockQuantity() >= order.getQuantity()) {
+                double amount = order.getQuantity() * product.getPrice();
+                order.setTotalPrice(amount);
+                product.setStockQuantity(product.getStockQuantity() - order.getQuantity());
+                orderRepo.save(order);
+                productRepo.save(product);
+            } else throw new RuntimeException("Stack is unavailable");
+        } else throw new RuntimeException("Stock is unavailable");
     }
 }
