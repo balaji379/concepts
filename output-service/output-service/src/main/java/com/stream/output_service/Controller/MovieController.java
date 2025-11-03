@@ -1,8 +1,10 @@
 package com.stream.output_service.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.stream.output_service.GrpcClient.MovieServiceClient;
 import com.stream.output_service.model.Thumbnails;
+import com.stream.output_service.model.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,12 +17,15 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.security.auth.callback.Callback;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.*;
+import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping("/api/movie")
@@ -30,6 +35,8 @@ public class MovieController {
     MovieServiceClient movieServiceClient;
 
     List<Thumbnails> thumbnails = new ArrayList<>();
+
+    ExecutorService executors = Executors.newVirtualThreadPerTaskExecutor();
 
     @PostConstruct
     public void generateThumbnails() throws IOException {
@@ -43,27 +50,56 @@ public class MovieController {
         thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "endgamepick.jpeg")).readAllBytes())).build());
     }
 
+    @GetMapping("/virutalthread")
+    public List<ObjectNode> generateUser() throws ExecutionException, InterruptedException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<Callable<ObjectNode>> tasks = IntStream.range(1, 30000)
+                .mapToObj(i -> (Callable<ObjectNode>) () -> {
+                    ObjectNode user = mapper.createObjectNode();
+                    user.put("id", i + 1);
+                    user.put("age", 21);
+                    user.put("address", "xyz" + i);
+                    user.put("name", "vb" + i);
+                    return user;
+                }).toList();
+        return executors.invokeAll(tasks).stream().map(task -> {
+            try {
+                return task.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+    }
+
     @GetMapping("/start-thumbnail-stream")
     public StreamingResponseBody startThumbnailsStream(HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        System.out.println("i have caught you request");
+        System.out.println("Request received for /start-thumbnail-stream");
+
+        // Return a StreamingResponseBody that writes directly in the request thread
         return outputStream -> {
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-            try {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8))) {
+                ObjectMapper objectMapper = new ObjectMapper();
+
                 for (Thumbnails thumbnail : thumbnails) {
-                    String json = new ObjectMapper().writeValueAsString(thumbnail);
-                    //System.out.println("response : " + json);
+                    String json = objectMapper.writeValueAsString(thumbnail);
                     writer.write(json);
-                    writer.write("\n");
-                    writer.flush();
-                    Thread.sleep(1000);
+                    writer.newLine(); // same as "\n"
+                    writer.flush();   // flush each JSON line immediately
+                    Thread.sleep(1000); // simulate streaming delay
                 }
 
             } catch (Exception e) {
+                System.err.println("Error while streaming thumbnails: " + e.getMessage());
+                e.printStackTrace();
             }
         };
     }
+
 
 
     @GetMapping("/start-stream")
@@ -77,10 +113,7 @@ public class MovieController {
     private static final String VIDEO_DIR = "C:/movies/"; // your path
 
     @GetMapping("/{fileName}")
-    public ResponseEntity<Resource> streamVideo(
-            @PathVariable String fileName,
-            @RequestHeader(value = "Range", required = false) String rangeHeader
-    ) throws IOException {
+    public ResponseEntity<Resource> streamVideo(@PathVariable String fileName, @RequestHeader(value = "Range", required = false) String rangeHeader) throws IOException {
         String prefixpath = "D:\\GitHub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\";
         File videoFile = new File(prefixpath + fileName);
         if (!videoFile.exists()) {
@@ -120,9 +153,7 @@ public class MovieController {
         byte[] data = inputStream.readNBytes((int) contentLength);
         inputStream.close();
 
-        return ResponseEntity.status(rangeHeader == null ? HttpStatus.OK : HttpStatus.PARTIAL_CONTENT)
-                .headers(headers)
-                .body(new ByteArrayResource(data));
+        return ResponseEntity.status(rangeHeader == null ? HttpStatus.OK : HttpStatus.PARTIAL_CONTENT).headers(headers).body(new ByteArrayResource(data));
     }
 }
 
