@@ -5,6 +5,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.stream.output_service.GrpcClient.MovieServiceClient;
 import com.stream.output_service.model.Thumbnails;
 import com.stream.output_service.model.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
+@Tag(name = "movie-controller", description = "handling stream request ")
 @RestController
 @RequestMapping("/api/movie")
 public class MovieController {
@@ -40,7 +47,8 @@ public class MovieController {
 
     @PostConstruct
     public void generateThumbnails() throws IOException {
-        String prefixPath = "D:\\GitHub\\concepts\\output-service\\output-service\\src\\main\\java\\images\\";
+
+        String prefixPath = "C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\images\\";
         thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_4K HDR IMAX  Wanda in Mirror Dimension - Doctor Strange in the Multiverse of Madness  Dolby 5.1_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "avengers.jpeg")).readAllBytes())).build());
         thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_8K HDR  The Mirror Dimension (Spider-Man No Way Home)  Dolby 5.1_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "endgamepick.jpeg")).readAllBytes())).build());
         thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "endgameprime.jpg")).readAllBytes())).build());
@@ -49,6 +57,7 @@ public class MovieController {
         thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_Spring Boot + gRPC  Server Streaming Explained  Real-Time Stock Update Example @Javatechie_1080p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "avengers.jpeg")).readAllBytes())).build());
         thumbnails.add(Thumbnails.builder().id(1).name("SSYouTube.online_SPIDER-MAN HOMECOMING Best Action Scenes 4K ᴴᴰ_720p.mp4").img(Base64.getEncoder().encodeToString(new FileInputStream(new File(prefixPath + "endgamepick.jpeg")).readAllBytes())).build());
     }
+
 
     @GetMapping("/virutalthread")
     public List<ObjectNode> generateUser() throws ExecutionException, InterruptedException {
@@ -74,7 +83,18 @@ public class MovieController {
         }).toList();
     }
 
+
+    @Operation(summary = "stream the thumbnail one by one", description = "streaming the thumbnail obj one by one with streamingResponseBody method")
+
     @GetMapping("/start-thumbnail-stream")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",
+                    content = {@Content(
+                            schema = @Schema(implementation = StreamingResponseBody.class),
+                            mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = @Content(schema = @Schema()))
+    })
     public StreamingResponseBody startThumbnailsStream(HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -101,9 +121,8 @@ public class MovieController {
     }
 
 
-
     @GetMapping("/start-stream")
-    public void startstream(HttpServletRequest request, HttpServletResponse response) {
+    public void startstream(HttpServletRequest request, HttpServletResponse response, @RequestHeader(value = "Range", required = false) String rangeHeader) {
         response.setContentType("video/mp4");
         response.setHeader("Content-Dispostion", "inline;filename=\"movie.mp4\"");
         AsyncContext asyncContext = request.startAsync();
@@ -113,8 +132,12 @@ public class MovieController {
     private static final String VIDEO_DIR = "C:/movies/"; // your path
 
     @GetMapping("/{fileName}")
-    public ResponseEntity<Resource> streamVideo(@PathVariable String fileName, @RequestHeader(value = "Range", required = false) String rangeHeader) throws IOException {
-        String prefixpath = "D:\\GitHub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\";
+    public ResponseEntity<Resource> streamVideo(
+            @PathVariable String fileName,
+            @RequestHeader(value = "Range", required = false) String rangeHeader
+    ) throws IOException {
+        String prefixpath = "C:\\Users\\DELL\\OneDrive\\Desktop\\vbgithub\\concepts\\output-service\\output-service\\src\\main\\java\\video\\";
+
         File videoFile = new File(prefixpath + fileName);
         if (!videoFile.exists()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -1,12 +1,13 @@
-package com.stream.output_service;
+package com.tutorial.transaction;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OutputServiceApplication {
+public class TransactionApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OutputServiceApplication.class, args);
+		SpringApplication.run(TransactionApplication.class, args);
 	}
-    }
+
+}
