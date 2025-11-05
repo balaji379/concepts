@@ -1,0 +1,40 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_outer_classname = "EmployeeProtoBufService";
+option java_package = "com.tutorial.grpc_employee";
+
+message EmployeeProto{
+  int32 empId = 1;
+  string empName = 2;
+  Address address = 3;
+}
+
+message Address{
+  int32 empId = 1;
+  string address = 2;
+}
+message EmployeeRequest{
+  int32 empId = 1;
+}
+
+message EmployeeResponse{
+  EmployeeProto employee = 1;
+}
+message EmployeeListResponse{
+  repeated EmployeeProto employeeList = 1;
+}
+message AddressRequest{
+  int32 empId = 1;
+}
+message AddressAllResponse{
+  repeated Address address = 1;
+}
+message Empty{}
+service EmployeeService{
+  rpc getEmployee(EmployeeRequest) returns (EmployeeResponse);
+  rpc getAllEmployee(Empty) returns (stream EmployeeResponse);
+}
+service AddressService{
+  rpc getAddressById(AddressRequest) returns (Address);
+  rpc getAllAddress(Empty) returns (AddressAllResponse);
+}

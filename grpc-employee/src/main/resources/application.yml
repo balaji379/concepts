@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: grpc-service
+grpc:
+  server:
+    port: 9001
+    reflection-service-enabled: true
