@@ -33,8 +33,13 @@ message Empty{}
 service EmployeeService{
   rpc getEmployee(EmployeeRequest) returns (EmployeeResponse);
   rpc getAllEmployee(Empty) returns (stream EmployeeResponse);
+  rpc getEmployeeWithAddress(EmployeeRequest) returns (EmployeeResponse);
+  rpc getAllEmployeeWithAddress(Empty) returns (stream EmployeeResponse);
 }
 service AddressService{
   rpc getAddressById(AddressRequest) returns (Address);
-  rpc getAllAddress(Empty) returns (AddressAllResponse);
+  rpc getListOfAddress(Empty) returns (AddressAllResponse);
+  rpc getAllAddress(Empty) returns (stream Address);
+  rpc getListOfEmployeeWithAddress(Empty) returns (EmployeeListResponse);
+  rpc sendListEmployeeToAddress(stream EmployeeProto) returns (stream EmployeeProto);
 }

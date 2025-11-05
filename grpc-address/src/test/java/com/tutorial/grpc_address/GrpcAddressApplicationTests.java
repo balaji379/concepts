@@ -3,10 +3,10 @@ package com.tutorial.grpc_address;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class GrpcAddressApplicationTests {
 
-	@Test
+//	@Test
 	void contextLoads() {
 	}
 

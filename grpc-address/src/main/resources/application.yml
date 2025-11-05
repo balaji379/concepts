@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: grpc-address
+server:
+  port: 8002
+grpc:
+  server:
+    port: 9002
+    reflection-service-enabled: true
+
