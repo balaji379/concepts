@@ -48,7 +48,7 @@ public class NvdBatchConfig {
     @Bean
     public Step step(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
         return new StepBuilder("get_data_from_nvdAPi", jobRepository)
-                .<NvdEntity, NvdEntity>chunk(50, platformTransactionManager)
+                .<NvdEntity, NvdEntity>chunk(100, platformTransactionManager)
                 .reader(nvdEntityItemReader())
                 .processor(nvdEntityNvdEntityItemProcessor())
                 .writer(nvdEntityRepositoryItemWriter())

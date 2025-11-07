@@ -1,7 +1,6 @@
 package com.spring_batch.nvd_task.modal;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Cve {
-    private String cveId;
-    private String sourceIdentifier;
-    private LocalDateTime published;
-    private LocalDateTime lastModified;
-    private String vulnStatus;
-    @Embedded
-    private List<Description> descriptionList;
+     String cveId;
+     String sourceIdentifier;
+     LocalDateTime published;
+     LocalDateTime lastModified;
+     String vulnStatus;
+    @ElementCollection
+    @CollectionTable(name = "cve_descriptions", joinColumns = @JoinColumn(name = "cve_id"))
+     List<Description> descriptionList;
 }

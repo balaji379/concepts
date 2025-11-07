@@ -3,7 +3,7 @@ spring:
     name: nvd_task
   datasource:
     url: jdbc:mysql://localhost:3306/nvd_batch
-    password: 123456789
+    password: 2799
     username: root
   jpa:
     show-sql: true

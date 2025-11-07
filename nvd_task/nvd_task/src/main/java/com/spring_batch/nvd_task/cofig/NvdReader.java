@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class NvdReader implements ItemReader<NvdEntity> {
     private int startIndex;
@@ -40,45 +42,52 @@ public class NvdReader implements ItemReader<NvdEntity> {
                 return null;
             } else currentBatch = nvdEntities.iterator();
         }
+
         return currentBatch.next();
     }
 
-    public List<NvdEntity> fetchApi() {
+    public List<NvdEntity> fetchApi() throws Exception {
         String endPoint = String.format(url, startIndex);
-        Map<String, Object> response = restTemplate.getForObject(endPoint, Map.class);
         List<NvdEntity> nvdEntities = new ArrayList<>();
-        if (response != null && response.containsKey("vulnerabilities")) {
-            List<Map<String, Object>> vul = (List<Map<String, Object>>) (response.get("vulnerabilities"));
-            for (Map<String, Object> inner : vul) {
-                Map<String, Object> cveMap = (Map<String, Object>) inner.get("cve");
-                List<Description> descriptions = new ArrayList<>();
-                if (cveMap.containsKey("descriptions")) {
-                    List<Map<String, String>> descriptionList = (List<Map<String, String>>) cveMap.get("descriptions");
-                    for (Map<String, String> descriptionMap : descriptionList) {
-                        descriptions.add(Description.builder()
-                                .lang(descriptionMap.get("lang"))
-                                .value(descriptionMap.get("value"))
-                                .build());
-                    }
-                }
-                Cve cve = Cve.builder()
-                        .cveId(cveMap.get("id").toString())
-                        .sourceIdentifier(cveMap.get("sourceIdentifier").toString())
-                        .published(parseDate(cveMap.get("published").toString()))
-                        .lastModified(parseDate(cveMap.get("lastModified").toString()))
-                        .vulnStatus(cveMap.get("vulnStatus").toString())
-                        .descriptionList(descriptions)
-                        .build();
-                nvdEntities.add(NvdEntity.builder()
-                        .cve(cve)
-                        .build());
 
+        try {
+            Map<String, Object> response = restTemplate.getForObject(endPoint, Map.class);
+            if (response != null && response.containsKey("vulnerabilities")) {
+                List<Map<String, Object>> vul = (List<Map<String, Object>>) (response.get("vulnerabilities"));
+                for (Map<String, Object> inner : vul) {
+                    Map<String, Object> cveMap = (Map<String, Object>) inner.get("cve");
+                    List<Description> descriptions = new ArrayList<>();
+                    if (cveMap.containsKey("descriptions")) {
+                        List<Map<String, String>> descriptionList = (List<Map<String, String>>) cveMap.get("descriptions");
+                        for (Map<String, String> descriptionMap : descriptionList) {
+                            descriptions.add(Description.builder()
+                                    .lang(descriptionMap.get("lang"))
+                                    .value(descriptionMap.get("value"))
+                                    .build());
+                        }
+                    }
+                    Cve cve = Cve.builder()
+                            .cveId(cveMap.get("id").toString())
+                            .sourceIdentifier(cveMap.get("sourceIdentifier").toString())
+                            .published(parseDate(cveMap.get("published").toString()))
+                            .lastModified(parseDate(cveMap.get("lastModified").toString()))
+                            .vulnStatus(cveMap.get("vulnStatus").toString())
+                            .descriptionList(descriptions)
+                            .build();
+                    nvdEntities.add(NvdEntity.builder()
+                            .cve(cve)
+                            .build());
+
+                }
+                Integer responseCount = Integer.parseInt(response.get("totalResults").toString());
+                startIndex += PAGE_SIZE;
+                if (response == null || responseCount <= startIndex) {
+                    end = true;
+                }
             }
-            Integer responseCount = Integer.parseInt(response.get("totalResults").toString());
-            startIndex += PAGE_SIZE;
-            if (response == null || responseCount <= startIndex) {
-                end = true;
-            }
+        } catch (Exception e) {
+            Thread.sleep(2000);
+            return new ArrayList<>();
         }
         return nvdEntities;
     }
