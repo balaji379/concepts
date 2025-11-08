@@ -12,17 +12,17 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/employee-service")
+@RequestMapping("/api/address-service")
 public class AddressController {
 
     private final AddressService employeeService;
 
-    @GetMapping("/get-employee/{id}")
-    public Address getEmployeeById(@PathVariable int empId) {
-        return employeeService.getEmployee(empId);
+    @GetMapping("/get-address/{id}")
+    public Address getEmployeeById(@PathVariable int id) {
+        return employeeService.getEmployee(id);
     }
 
-    @GetMapping("/get-all-employee")
+    @GetMapping("/get_allAddress")
     public List<Address> getEmployee() {
         return employeeService.getAllEmplyee();
     }

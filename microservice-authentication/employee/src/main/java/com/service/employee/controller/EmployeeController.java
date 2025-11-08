@@ -18,8 +18,8 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("/get-employee/{id}")
-    public Employee getEmployeeById(@PathVariable int empId) {
-        return employeeService.getEmployee(empId);
+    public Employee getEmployeeById(@PathVariable int id) {
+        return employeeService.getEmployee(id);
     }
 
     @GetMapping("/get-all-employee")

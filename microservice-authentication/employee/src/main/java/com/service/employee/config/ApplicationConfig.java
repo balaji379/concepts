@@ -2,12 +2,16 @@ package com.service.employee.config;
 
 import com.service.employee.client.AddressClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
+import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.cloud.client.loadbalancer.reactive.LoadBalancedExchangeFilterFunction;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+
+import java.util.concurrent.Executors;
 
 @Configuration
 @RequiredArgsConstructor
@@ -29,5 +33,16 @@ public class ApplicationConfig {
                 .builderFor(WebClientAdapter.create(addressWebClient()))
                 .build();
         return httpServiceProxyFactory.createClient(AddressClient.class);
+    }
+
+//    @Bean
+//    TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreads() {
+//        return protocolHandler -> {
+//            protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+//        };
+//    }
+    @Bean
+    TomcatProtocolHandlerCustomizer<?> protocolHandlerCustomizer(){
+        return protocolHandler -> protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
     }
 }
