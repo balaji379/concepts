@@ -18,10 +18,14 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("/get-employee/{id}")
+<<<<<<< HEAD
     public Employee getEmployeeById(@PathVariable int id) {
         return employeeService.getEmployee(id);
 
     public Employee getEmployeeById(@PathVariable("id") int empId) {
+=======
+    public Employee getEmployeeById(@PathVariable int empId) {
+>>>>>>> parent of 83ba36b (microservice-authentication)
         return employeeService.getEmployee(empId);
 
     }

@@ -12,11 +12,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/address-service")
+@RequestMapping("/api/employee-service")
 public class AddressController {
 
     private final AddressService employeeService;
 
+<<<<<<< HEAD
     @GetMapping("/get-address/{id}")
     public Address getEmployeeById(@PathVariable int id) {
         return employeeService.getEmployee(id);
@@ -25,10 +26,14 @@ public class AddressController {
     @GetMapping("/get_allAddress")
 
     public Address getEmployeeById(@PathVariable("id") int empId) {
+=======
+    @GetMapping("/get-employee/{id}")
+    public Address getEmployeeById(@PathVariable int empId) {
+>>>>>>> parent of 83ba36b (microservice-authentication)
         return employeeService.getEmployee(empId);
     }
 
-    @GetMapping("/get-all-address")
+    @GetMapping("/get-all-employee")
     public List<Address> getEmployee() {
         return employeeService.getAllEmplyee();
     }

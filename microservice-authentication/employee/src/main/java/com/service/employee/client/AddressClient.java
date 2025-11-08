@@ -1,16 +1,14 @@
 package com.service.employee.client;
 
-import com.service.employee.modal.Address;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
 import java.util.List;
 
-@HttpExchange("/api/address-service")
+@HttpExchange
 public interface AddressClient {
 
+<<<<<<< HEAD
     @GetExchange("/get-address/{id}")
     public Address get_addressById(@PathVariable("id") int id);
 
@@ -20,6 +18,10 @@ public interface AddressClient {
 
     @GetExchange("/get-all-address")
     public List<Address> get_allAddress();
+=======
+    @GetExchange("/api/address-service/get-address")
+    public List<Address> get_address();
+>>>>>>> parent of 83ba36b (microservice-authentication)
 
 
 }

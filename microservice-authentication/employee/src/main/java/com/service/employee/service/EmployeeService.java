@@ -1,22 +1,17 @@
 package com.service.employee.service;
 
 import com.service.employee.EmployeeApplication;
-import com.service.employee.client.AddressClient;
 import com.service.employee.modal.Address;
 import com.service.employee.modal.Employee;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class EmployeeService {
 
-    private final AddressClient addressClient;
     List<Employee> employeeList = new ArrayList<>();
     private final AddressClient addressClient;
 
@@ -33,6 +28,7 @@ public class EmployeeService {
         }
     }
 
+<<<<<<< HEAD
     public Employee getEmployee(int empId) {
 
         Employee employee = employeeList.get(empId - 1);
@@ -77,5 +73,16 @@ public class EmployeeService {
                     .address(addressIterator.next())
                     .build();
         }).toList();
+=======
+    public Employee getEmployee(int empId){
+        return employeeList.get(empId - 1);
     }
+
+    public List<Employee> getAllEmplyee(){
+        return employeeList;
+>>>>>>> parent of 83ba36b (microservice-authentication)
+    }
+
+
+
 }
