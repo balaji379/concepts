@@ -2,7 +2,11 @@ package com.service.employee.config;
 
 import com.service.employee.client.AddressClient;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
+
+import org.apache.coyote.ProtocolHandler;
+
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.cloud.client.loadbalancer.reactive.LoadBalancedExchangeFilterFunction;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +26,7 @@ public class ApplicationConfig {
 
     public WebClient addressWebClient() {
         return WebClient.builder()
-                .baseUrl("http://address-service")
+                .baseUrl("lb://address-service")
                 .filter(loadBalancedExchangeFilterFunction)
                 .build();
     }
@@ -35,14 +39,16 @@ public class ApplicationConfig {
         return httpServiceProxyFactory.createClient(AddressClient.class);
     }
 
+
 //    @Bean
 //    TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreads() {
 //        return protocolHandler -> {
 //            protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
 //        };
 //    }
+
     @Bean
-    TomcatProtocolHandlerCustomizer<?> protocolHandlerCustomizer(){
+    TomcatProtocolHandlerCustomizer<ProtocolHandler> tomcatProtocolHandlerCustomizer() {
         return protocolHandler -> protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
     }
 }

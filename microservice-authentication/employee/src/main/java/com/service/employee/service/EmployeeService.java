@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeService {
 
+    private final AddressClient addressClient;
     List<Employee> employeeList = new ArrayList<>();
     private final AddressClient addressClient;
 
@@ -33,6 +34,7 @@ public class EmployeeService {
     }
 
     public Employee getEmployee(int empId) {
+
         Employee employee = employeeList.get(empId - 1);
         Address address = addressClient.get_addressById(empId);
         return Employee.builder()
@@ -52,6 +54,27 @@ public class EmployeeService {
                     .name(e.name())
                     .id(e.id())
                     .department(e.department())
+                    .build();
+
+        Employee emp = employeeList.get(empId);
+        return
+                Employee.builder()
+                        .name(emp.name())
+                        .id(empId)
+                        .department(emp.department())
+                        .address(addressClient.get_addressById(empId))
+                        .build();
+
+    }
+
+    public List<Employee> getAllEmplyee() {
+        Iterator<Address> addressIterator = addressClient.get_allAddress().iterator();
+        return employeeList.stream().map(e -> {
+            return Employee.builder()
+                    .name(e.name())
+                    .id(e.id())
+                    .department(e.department())
+                    .address(addressIterator.next())
                     .build();
         }).toList();
     }

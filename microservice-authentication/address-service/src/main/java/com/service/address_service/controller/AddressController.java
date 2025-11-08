@@ -23,6 +23,12 @@ public class AddressController {
     }
 
     @GetMapping("/get_allAddress")
+
+    public Address getEmployeeById(@PathVariable("id") int empId) {
+        return employeeService.getEmployee(empId);
+    }
+
+    @GetMapping("/get-all-address")
     public List<Address> getEmployee() {
         return employeeService.getAllEmplyee();
     }

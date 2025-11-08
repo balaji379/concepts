@@ -14,7 +14,12 @@ public interface AddressClient {
     @GetExchange("/get-address/{id}")
     public Address get_addressById(@PathVariable("id") int id);
 
+
     @GetExchange("/get_allAddress")
     public List<Address> getAllAddress();
+
+    @GetExchange("/get-all-address")
+    public List<Address> get_allAddress();
+
 
 }
