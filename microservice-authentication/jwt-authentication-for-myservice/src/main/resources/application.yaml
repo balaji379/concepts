@@ -4,8 +4,8 @@ spring:
   application:
     name: jwt-authentication-for-myservice
   datasource:
-    url: jdbc:mysql://localhost:3306/vb
-    password: 123456789
+    url: jdbc:mysql://localhost:3306/user
+    password: 2799
     username: root
   jpa:
     show-sql: true

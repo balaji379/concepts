@@ -18,6 +18,10 @@ spring:
                 - Path=/api/address-service/**
               filters:
                 - AuthenticationFilter
+            - id: jwt-authentication-for-myservice
+              uri: lb://jwt-authentication-for-myservice
+              predicates:
+                - Path=/api/auth/**
           discovery:
             locator:
               enabled: true
